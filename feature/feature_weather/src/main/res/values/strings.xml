@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title_wind">Wind</string>
+    <string name="title_feels_like">Feels like</string>
+    <string name="title_visibility">Visibility</string>
+    <string name="title_humidity">Humidity</string>
+    <string name="title_precipitation">Prob. of precipitation</string>
+    <string name="title_last_update">Last update</string>
+
+</resources>

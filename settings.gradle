@@ -1,0 +1,7 @@
+include ':app'
+rootProject.name='KotlinApplication'
+include ':core'
+include ':navigation'
+include ':data:data_weather'
+include ':domain:domain_weather'
+include ':feature:feature_weather'

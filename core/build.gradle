@@ -1,0 +1,79 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+def apikeyPropertiesFile = rootProject.file("apikey.properties")
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
+android {
+    compileSdkVersion 29
+
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+
+        buildConfigField("String", "API_KEY_PLACES", apikeyProperties['API_KEY_PLACES'])
+        buildConfigField("String", "API_KEY_WEATHER", apikeyProperties['API_KEY_WEATHER'])
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    api deps.kotlin.stdlib
+
+    api deps.androidx.legacySupportV4
+    api deps.androidx.appCompat
+    api deps.androidx.constraint
+    api deps.androidx.lifecycle.viewModel
+    api deps.androidx.lifecycle.liveData
+    api deps.androidx.room.runtime
+    api deps.androidx.room.rxJava
+    api deps.androidx.navigation.fragment
+    api deps.androidx.navigation.ui
+    api deps.androidx.preference
+
+    api deps.rxJava.rxJava
+    api deps.rxJava.rxAndroid
+
+    api deps.retrofit.retrofit
+    api deps.retrofit.adapterRxJava
+    api deps.retrofit.converterGson
+
+    api deps.okHttp
+    api deps.gson
+    api deps.dagger.dagger
+    api deps.materialDesign
+
+    api deps.threetenabp
+    api deps.glide.glide
+    api deps.conscrypt
+    api deps.stetho
+    api deps.googlePlaces
+    api deps.weatherIconView
+
+    kapt deps.androidx.room.compiler
+    kapt deps.dagger.compiler
+    kapt deps.glide.compiler
+}
