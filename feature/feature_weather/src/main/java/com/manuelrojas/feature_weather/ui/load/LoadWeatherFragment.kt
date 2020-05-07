@@ -21,6 +21,7 @@ import com.manuelrojas.feature_weather.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.load_weather_fragment.*
 
 const val AUTOCOMPLETE_REQUEST_CODE = 1
+private val TAG = LoadWeatherFragment::class.java.name
 
 class LoadWeatherFragment : BaseFragment() {
 
@@ -30,8 +31,6 @@ class LoadWeatherFragment : BaseFragment() {
             Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG)
 
     private var location: String? = null
-
-    private val TAG: String = "LoadWeatherFragment"
 
     private var isSwipeRefresh: Boolean = false
 
@@ -48,9 +47,14 @@ class LoadWeatherFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         setSwipeRefreshView()
+        if (savedInstanceState != null) {
+            restoreWeatherState(savedInstanceState)
+        } else {
+            checkFirstLoad()
+        }
         initializeViewModelObserver()
-        checkFirstLoad()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -70,6 +74,39 @@ class LoadWeatherFragment : BaseFragment() {
 //            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        saveWeatherState(outState)
+    }
+
+    private fun saveWeatherState(outState: Bundle) {
+        outState.putString(WEATHER_CONDITION, tv_condition.text as String?)
+        outState.putString(WEATHER_TEMPERATURE, tv_temperature.text as String?)
+        outState.putString(WEATHER_FEELS_LIKE, tv_feels_like_temperature.text as String?)
+        outState.putString(WEATHER_WIND, tv_wind.text as String?)
+        outState.putString(WEATHER_VISIBILITY, tv_visibility.text as String?)
+        outState.putString(WEATHER_HUMIDITY, tv_humidity.text as String?)
+        outState.putString(WEATHER_PRECIPITATION, tv_precipitation.text as String?)
+        outState.putString(WEATHER_ICON, weather_icon.text as String?)
+        outState.putString(WEATHER_LAST_UPDATE, tv_last_update.text as String?)
+        outState.putString(WEATHER_CITY, (activity as? AppCompatActivity)?.supportActionBar?.title as String?)
+        outState.putString(WEATHER_LOCATION, location)
+    }
+
+    private fun restoreWeatherState(outState: Bundle){
+        tv_condition.text = outState.getString(WEATHER_CONDITION)
+        tv_temperature.text = outState.getString(WEATHER_TEMPERATURE)
+        tv_feels_like_temperature.text = outState.getString(WEATHER_FEELS_LIKE)
+        tv_wind.text = outState.getString(WEATHER_WIND)
+        tv_visibility.text = outState.getString(WEATHER_VISIBILITY)
+        tv_humidity.text = outState.getString(WEATHER_HUMIDITY)
+        tv_precipitation.text = outState.getString(WEATHER_PRECIPITATION)
+        weather_icon.text = outState.getString(WEATHER_ICON)
+        tv_last_update.text = outState.getString(WEATHER_LAST_UPDATE)
+        (activity as? AppCompatActivity)?.supportActionBar?.title = outState.getString(WEATHER_CITY)
+        location = outState.getString(WEATHER_LOCATION)
     }
 
     private fun setSwipeRefreshView() {
@@ -169,8 +206,9 @@ class LoadWeatherFragment : BaseFragment() {
             swipeRefresh.isRefreshing = false
             isSwipeRefresh = false
         }
+
         displayWeatherView(weatherResource.data!!)
-        preferenceUtils.saveLastLocation(location!!)
+        preferenceUtils.saveLastLocation(location)
     }
 
     private fun displayWeatherView(weatherView: WeatherView) {

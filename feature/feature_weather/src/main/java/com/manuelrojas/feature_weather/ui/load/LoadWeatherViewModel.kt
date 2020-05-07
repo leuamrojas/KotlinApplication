@@ -1,9 +1,11 @@
 package com.manuelrojas.feature_weather.ui.load
 
-import com.manuelrojas.core.*
+import com.manuelrojas.core.Result
 import com.manuelrojas.core.extensions.setError
 import com.manuelrojas.core.extensions.setLoading
 import com.manuelrojas.core.extensions.setSuccess
+import com.manuelrojas.core.onFailure
+import com.manuelrojas.core.onSuccess
 import com.manuelrojas.domain_weather.model.WeatherInfo
 import com.manuelrojas.domain_weather.usecase.GetWeatherUseCase
 import com.manuelrojas.feature_weather.common.NO_INTERNET_ERROR
@@ -11,6 +13,8 @@ import com.manuelrojas.feature_weather.model.WeatherView
 import com.manuelrojas.feature_weather.model.mapToView
 import com.manuelrojas.feature_weather.ui.base.BaseViewModel
 import javax.inject.Inject
+
+private val TAG = LoadWeatherViewModel::class.java.name
 
 class LoadWeatherViewModel @Inject constructor(
         private val getWeatherUseCase: GetWeatherUseCase
@@ -24,9 +28,9 @@ class LoadWeatherViewModel @Inject constructor(
 
         getWeatherUseCase.run {
             clear()
-            buildUseCaseParams( GetWeatherUseCase.Params.buildParams(location) )
+            buildUseCaseParams(GetWeatherUseCase.Params.buildParams(location))
             executeUseCase {
-                handleResult( it )
+                handleResult(it)
             }
         }
     }

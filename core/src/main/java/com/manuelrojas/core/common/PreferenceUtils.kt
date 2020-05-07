@@ -14,7 +14,7 @@ class PreferenceUtils @Inject constructor(context: Context){
     private val preference: SharedPreferences
         get() = PreferenceManager.getDefaultSharedPreferences(appContext)
 
-    fun saveLastLocation(location: String) {
+    fun saveLastLocation(location: String?) {
         preference.edit().putString(KEY_LOCATION, location).apply()
     }
 
